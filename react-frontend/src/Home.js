@@ -1,11 +1,17 @@
 import { useAuth } from "./context/AuthProvider";
 import React, { useState } from "react";
-export const Home = () => {
-  const { value } = useAuth();
-  const [username, setUser] = useState(''); 
-  const [password, setPass] = useState(''); 
 
-  const displayIC = (e) => {
+export const Home = (props) => {
+  
+  const [ret, setRet] = useState(
+    {
+      user: "", 
+      pass: "",
+    }
+  ); 
+
+
+  function displayIC() {
     if(value.token === null){
       alert("incorrect username or password (username: bj password: pass424)")
     } else {
@@ -13,15 +19,31 @@ export const Home = () => {
     }
   }
 
+const submitFormU = async () => {
+    // setRet({user: username, pass: 'pass424'});
+    console.log("submitFormU " + ret.user + "\t" + ret.pass);
+    const l = await props.handleSubmitU(ret); 
+    console.log("Stat: " + l); 
+    setRet({user: '', pass: ''}); 
+    if(l){
+    return value.onLogin();  
+    } 
+    else {
+      displayIC(); 
+    }
+  }
+
+  const { value } = useAuth();
+
   return (
     <>
       <h2>Home (Public)</h2>
       <form>
         <label for="username">username</label>
-        <input value={username} onChange={(e) => setUser(e.target.value)}type="username" placeholder="username"></input>
+        <input value={ret.user} onChange={(e) => setRet({user: e.target.value, pass: ret['pass']})}type="username" placeholder="username"></input>
         <label for="password">password</label>
-        <input value={password} onChange={(e) => setPass(e.target.value)}type="password" placeholder="****"></input>
-        <button type="button" onClick={(username==="bj" && password === "pass424" && value.onLogin) || displayIC}>
+        <input value={ret.pass} onChange={(e) => setRet({user: ret['user'], pass: e.target.value})}type="password" placeholder="****"></input>
+        <button type="button" onClick={submitFormU}>
           Sign In
         </button>
         </form>
