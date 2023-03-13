@@ -17,4 +17,6 @@ cd react-frontend
 
 npm install
 
+npm install axios 
+
 npm start 
