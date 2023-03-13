@@ -25,7 +25,7 @@ const submitFormU = async () => {
     const l = await props.handleSubmitU(ret); 
     console.log("Stat: " + l); 
     setRet({user: '', pass: ''}); 
-    if(l){
+    if(l && value.token == null){
     return value.onLogin();  
     } 
     else {
